@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { TextField, Button, Box } from "@mui/material";
-import { motion } from "framer-motion";
+import { Box, TextField, Button, Paper } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
 
 function SearchBar({ onSearch }) {
   const [from, setFrom] = useState("");
@@ -11,45 +11,46 @@ function SearchBar({ onSearch }) {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: -20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6 }}
+    <Paper
+      elevation={4}
+      sx={{
+        mt: 5,
+        p: 3,
+        borderRadius: 4,
+        display: "flex",
+        gap: 2,
+        flexWrap: "wrap",
+        justifyContent: "center",
+      }}
     >
-      <Box
+      <TextField
+        label="From"
+        value={from}
+        onChange={(e) => setFrom(e.target.value)}
+        sx={{ width: 220 }}
+      />
+
+      <TextField
+        label="To"
+        value={to}
+        onChange={(e) => setTo(e.target.value)}
+        sx={{ width: 220 }}
+      />
+
+      <Button
+        variant="contained"
+        color="secondary"
+        size="large"
+        startIcon={<SearchIcon />}
+        onClick={handleSearch}
         sx={{
-          display: "flex",
-          gap: 2,
-          justifyContent: "center",
-          alignItems: "center",
-          mt: 4,
-          flexWrap: "wrap",
+          px: 4,
+          borderRadius: 3,
         }}
       >
-        <TextField
-          label="From"
-          variant="outlined"
-          value={from}
-          onChange={(e) => setFrom(e.target.value)}
-        />
-
-        <TextField
-          label="To"
-          variant="outlined"
-          value={to}
-          onChange={(e) => setTo(e.target.value)}
-        />
-
-        <Button
-          variant="contained"
-          color="secondary"
-          size="large"
-          onClick={handleSearch}
-        >
-          Search ✈️
-        </Button>
-      </Box>
-    </motion.div>
+        Search
+      </Button>
+    </Paper>
   );
 }
 

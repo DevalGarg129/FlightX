@@ -7,15 +7,29 @@ import CssBaseline from "@mui/material/CssBaseline";
 
 const theme = createTheme({
   palette: {
+    mode: "light",
     primary: {
       main: "#1565c0",
     },
     secondary: {
       main: "#ff9800",
     },
+    background: {
+      default: "#f5f7fb",
+    },
   },
   typography: {
     fontFamily: "Poppins, sans-serif",
+    h2: {
+      fontWeight: 700,
+    },
+    button: {
+      textTransform: "none",
+      fontWeight: 600,
+    },
+  },
+  shape: {
+    borderRadius: 14,
   },
 });
 

@@ -4,6 +4,7 @@ import Navbar from "./components/Navbar";
 import Register from "./pages/Register";
 import Home from "./pages/Home";
 import Flights from "./pages/Flights";
+import FlightDetails from "./pages/FlightDetails";
 import Dashboard from "./pages/Dashboard";
 import Booking from "./pages/Booking";
 import Login from "./pages/Login";
@@ -17,6 +18,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/flights" element={<Flights />} />
         <Route path="/booking/:id" element={<Booking />} />
+        <Route path="/flight/:id" element={<FlightDetails />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />

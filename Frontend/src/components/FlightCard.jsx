@@ -1,32 +1,66 @@
+import {
+  Card,
+  CardContent,
+  Typography,
+  Button,
+  Chip,
+  Box,
+} from "@mui/material";
+import AirlineSeatReclineNormalIcon from "@mui/icons-material/AirlineSeatReclineNormal";
+import FlightIcon from "@mui/icons-material/Flight";
 import { Link } from "react-router-dom";
 
 function FlightCard({ flight }) {
   return (
-    <div className="bg-white rounded-2xl shadow-lg p-6 hover:scale-105 transition-transform duration-300">
-      <h3 className="text-2xl font-bold text-blue-600 mb-2">
-        {flight.airline}
-      </h3>
+    <Card
+      elevation={6}
+      sx={{
+        borderRadius: 5,
+        transition: "0.3s",
+        "&:hover": {
+          transform: "translateY(-8px)",
+        },
+      }}
+    >
+      <CardContent>
+        {/* Airline */}
+        <Typography variant="h5" fontWeight="bold" color="primary">
+          {flight.airline}
+        </Typography>
 
-      <p className="text-gray-700 text-lg font-medium">
-        {flight.from} ✈️ {flight.to}
-      </p>
+        {/* Route */}
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1, mt: 1 }}>
+          <FlightIcon color="action" />
+          <Typography variant="body1">
+            {flight.from} → {flight.to}
+          </Typography>
+        </Box>
 
-      <div className="mt-3 text-gray-600 space-y-1">
-        <p>Departure: {flight.departureTime}</p>
-        <p>Arrival: {flight.arrivalTime}</p>
-        <p className="font-semibold text-black">
-          Price: ₹{flight.price}
-        </p>
-        <p>Seats Left: {flight.seatsAvailable}</p>
-      </div>
+        {/* Price */}
+        <Typography variant="h6" sx={{ mt: 2 }}>
+          ₹{flight.price}
+        </Typography>
 
-      <Link
-        to={`/booking/${flight._id}`}
-        className="block mt-5 text-center bg-blue-600 text-white py-2 rounded-xl hover:bg-blue-700"
-      >
-        Book Now 🎟️
-      </Link>
-    </div>
+        {/* Seats */}
+        <Chip
+          icon={<AirlineSeatReclineNormalIcon />}
+          label={`${flight.seatsAvailable} Seats Left`}
+          color="secondary"
+          sx={{ mt: 2 }}
+        />
+
+        {/* Book Button */}
+        <Button
+          fullWidth
+          variant="contained"
+          sx={{ mt: 3, py: 1.3 }}
+          component={Link}
+          to={`/booking/${flight._id}`}
+        >
+          Book Ticket 🎟️
+        </Button>
+      </CardContent>
+    </Card>
   );
 }
 

@@ -2,25 +2,29 @@ import { useState } from "react";
 import axiosInstance from "../api/axiosInstance";
 import { useNavigate, Link } from "react-router-dom";
 
+import {
+  Box,
+  Card,
+  CardContent,
+  Typography,
+  TextField,
+  Button,
+} from "@mui/material";
+
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
+
 function Register() {
   const navigate = useNavigate();
 
-  // Form State
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
   });
 
-  // Handle Input Change
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
+  const handleChange = (e) =>
+    setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  // Handle Register Submit
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -28,74 +32,92 @@ function Register() {
       await axiosInstance.post("/auth/register", formData);
 
       alert("Registration Successful ✅");
-
-      // Redirect to Login Page
       navigate("/login");
     } catch (error) {
-      alert(error.response?.data?.message || "Registration Failed ❌");
+      alert("Registration Failed ❌");
     }
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white shadow-lg p-8 rounded-xl w-[400px]"
-      >
-        <h2 className="text-3xl font-bold text-center mb-6">
-          Register ✈️
-        </h2>
+    <Box
+      sx={{
+        minHeight: "100vh",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        bgcolor: "#f5f7fb",
+      }}
+    >
+      <Card sx={{ width: 450, borderRadius: 4, boxShadow: 6 }}>
+        <CardContent sx={{ p: 5 }}>
+          <Box sx={{ textAlign: "center", mb: 3 }}>
+            <PersonAddIcon sx={{ fontSize: 55, color: "secondary.main" }} />
 
-        {/* Name */}
-        <input
-          type="text"
-          name="name"
-          placeholder="Enter Full Name"
-          value={formData.name}
-          onChange={handleChange}
-          className="w-full border p-3 rounded mb-4"
-          required
-        />
+            <Typography variant="h4" fontWeight="bold">
+              Register
+            </Typography>
 
-        {/* Email */}
-        <input
-          type="email"
-          name="email"
-          placeholder="Enter Email"
-          value={formData.email}
-          onChange={handleChange}
-          className="w-full border p-3 rounded mb-4"
-          required
-        />
+            <Typography variant="body2" color="text.secondary">
+              Create your FlightX account ✈️
+            </Typography>
+          </Box>
 
-        {/* Password */}
-        <input
-          type="password"
-          name="password"
-          placeholder="Enter Password"
-          value={formData.password}
-          onChange={handleChange}
-          className="w-full border p-3 rounded mb-4"
-          required
-        />
+          {/* Form */}
+          <form onSubmit={handleSubmit}>
+            <TextField
+              label="Full Name"
+              name="name"
+              fullWidth
+              required
+              sx={{ mb: 3 }}
+              value={formData.name}
+              onChange={handleChange}
+            />
 
-        {/* Button */}
-        <button
-          type="submit"
-          className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700"
-        >
-          Register
-        </button>
+            <TextField
+              label="Email"
+              name="email"
+              type="email"
+              fullWidth
+              required
+              sx={{ mb: 3 }}
+              value={formData.email}
+              onChange={handleChange}
+            />
 
-        {/* Login Link */}
-        <p className="text-center mt-4 text-gray-600">
-          Already have an account?{" "}
-          <Link to="/login" className="text-blue-600 font-bold">
-            Login
-          </Link>
-        </p>
-      </form>
-    </div>
+            <TextField
+              label="Password"
+              name="password"
+              type="password"
+              fullWidth
+              required
+              sx={{ mb: 3 }}
+              value={formData.password}
+              onChange={handleChange}
+            />
+
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="secondary"
+              size="large"
+              sx={{ py: 1.3, borderRadius: 3 }}
+            >
+              Register 🚀
+            </Button>
+          </form>
+
+          {/* Login Link */}
+          <Typography textAlign="center" sx={{ mt: 3 }}>
+            Already have an account?{" "}
+            <Link to="/login" style={{ color: "#1565c0" }}>
+              Login
+            </Link>
+          </Typography>
+        </CardContent>
+      </Card>
+    </Box>
   );
 }
 

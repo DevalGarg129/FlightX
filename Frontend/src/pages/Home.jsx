@@ -1,6 +1,7 @@
 import { Typography, Container } from "@mui/material";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import SearchBar from "../components/Searchbar";
 
 function Home() {
   const navigate = useNavigate();

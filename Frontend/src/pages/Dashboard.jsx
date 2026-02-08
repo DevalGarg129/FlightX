@@ -1,60 +1,135 @@
 import { useEffect, useState } from "react";
 import axiosInstance from "../api/axiosInstance";
 
+import {
+  Typography,
+  Grid,
+  Card,
+  CardContent,
+  Button,
+  Chip,
+  Box,
+} from "@mui/material";
+
+import CancelIcon from "@mui/icons-material/Cancel";
+import FlightIcon from "@mui/icons-material/Flight";
+
+import PageWrapper from "../components/PageWrapper";
+
 function Dashboard() {
   const [bookings, setBookings] = useState([]);
 
-  useEffect(() => {
-    const fetchBookings = async () => {
-      const token = localStorage.getItem("token");
+  // Fetch Bookings
+  const fetchBookings = async () => {
+    const token = localStorage.getItem("token");
 
-      const res = await axiosInstance.get("/bookings/mybookings", {
+    const res = await axiosInstance.get("/bookings/mybookings", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    setBookings(res.data.bookings);
+  };
+
+  // Cancel Booking
+  const cancelBooking = async (id) => {
+    const token = localStorage.getItem("token");
+
+    await axiosInstance.put(
+      `/bookings/cancel/${id}`,
+      {},
+      {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      });
+      }
+    );
 
-      setBookings(res.data.bookings);
-    };
+    alert("Booking Cancelled ❌");
+    fetchBookings();
+  };
 
+  useEffect(() => {
     fetchBookings();
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-100 p-10">
-      <h2 className="text-4xl font-bold text-center text-blue-600 mb-10">
+    <PageWrapper>
+      <Typography variant="h3" fontWeight="bold" textAlign="center">
         My Bookings 🎟️
-      </h2>
+      </Typography>
 
       {bookings.length === 0 ? (
-        <p className="text-center text-gray-600">No bookings yet.</p>
+        <Typography textAlign="center" sx={{ mt: 5, color: "gray" }}>
+          No bookings yet. Book your first flight ✈️
+        </Typography>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <Grid container spacing={4} sx={{ mt: 4 }}>
           {bookings.map((booking) => (
-            <div
-              key={booking._id}
-              className="bg-white rounded-2xl shadow-lg p-6"
-            >
-              <h3 className="text-2xl font-bold text-blue-600">
-                {booking.flight.airline}
-              </h3>
+            <Grid item xs={12} md={6} key={booking._id}>
+              <Card
+                elevation={6}
+                sx={{
+                  borderRadius: 5,
+                  transition: "0.3s",
+                  "&:hover": { transform: "translateY(-6px)" },
+                }}
+              >
+                <CardContent>
+                  {/* Airline */}
+                  <Typography
+                    variant="h5"
+                    fontWeight="bold"
+                    color="primary"
+                  >
+                    {booking.flight.airline}
+                  </Typography>
 
-              <p className="text-gray-700 text-lg">
-                {booking.flight.from} → {booking.flight.to}
-              </p>
+                  {/* Route */}
+                  <Box sx={{ display: "flex", gap: 1, mt: 1 }}>
+                    <FlightIcon color="action" />
+                    <Typography>
+                      {booking.flight.from} → {booking.flight.to}
+                    </Typography>
+                  </Box>
 
-              <p className="mt-2">Passengers: {booking.passengers}</p>
-              <p>Total: ₹{booking.totalPrice}</p>
+                  {/* Info */}
+                  <Typography sx={{ mt: 2 }}>
+                    Passengers: {booking.passengers}
+                  </Typography>
 
-              <p className="font-semibold mt-2">
-                Status:{" "}
-                <span className="text-green-600">{booking.status}</span>
-              </p>
-            </div>
+                  <Typography>Total Price: ₹{booking.totalPrice}</Typography>
+
+                  {/* Status */}
+                  <Chip
+                    label={booking.status}
+                    color={
+                      booking.status === "Booked" ? "success" : "error"
+                    }
+                    sx={{ mt: 2 }}
+                  />
+
+                  {/* Cancel Button */}
+                  {booking.status === "Booked" && (
+                    <Button
+                      fullWidth
+                      variant="outlined"
+                      color="error"
+                      startIcon={<CancelIcon />}
+                      sx={{ mt: 3 }}
+                      onClick={() => cancelBooking(booking._id)}
+                    >
+                      Cancel Booking
+                    </Button>
+                  )}
+                </CardContent>
+              </Card>
+            </Grid>
           ))}
-        </div>
+        </Grid>
       )}
-    </div>
+    </PageWrapper>
   );
 }
 
